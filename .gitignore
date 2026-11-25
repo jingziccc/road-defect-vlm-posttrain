@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+data/
+index/
+out/
+saves/
+PaveTrack_OD/
+PaveTrack_OD.zip
+PaveTrack_OD.json
+labels_china/
+labels_norm/
+*.log
+*.bin

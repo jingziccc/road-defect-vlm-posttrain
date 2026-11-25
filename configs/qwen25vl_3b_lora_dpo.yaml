@@ -1,0 +1,42 @@
+### Stage 3: Offline LoRA-DPO Alignment on Hard Boundary Errors (LLaMA-Factory)
+model_name_or_path: saves/qwen25vl-3b/merged/sft
+stage: dpo
+do_train: true
+finetuning_type: lora
+
+### DPO + SFT regularization (pref_ftx prevents JSON collapse)
+pref_beta: 0.1
+pref_loss: sigmoid
+pref_ftx: 0.1
+
+### Freeze vision tower, tune LoRA adapters
+freeze_vision_tower: true
+freeze_multi_modal_projector: false
+lora_rank: 16
+lora_alpha: 32
+lora_dropout: 0.05
+lora_target: all
+
+### Dataset: (dual-view prompt, chosen=verified Stage-2 CoT, rejected=Stage-1 real error)
+dataset: pavetrack_dpo_hard_pairs
+eval_dataset: pavetrack_dpo_val
+template: qwen2_vl
+cutoff_len: 2048
+image_max_pixels: 802816
+overwrite_cache: true
+preprocessing_num_workers: 8
+
+### Output & Precision
+output_dir: saves/qwen25vl-3b/lora/dpo
+logging_steps: 10
+save_steps: 200
+eval_steps: 200
+eval_strategy: steps
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 8
+learning_rate: 5.0e-6
+num_train_epochs: 2.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+plot_loss: true
